@@ -14,10 +14,21 @@ class BaseRecyclerBinderAdapter<V extends ViewType, VH extends RecyclerView.View
 
     private final Object mLock = new Object();
     private final List<Binder<V, VH>> mObjects = new ArrayList<>();
+    private boolean disableRecycle = false;
+
+    public boolean isDisableRecycle() {
+        return disableRecycle;
+    }
+
+    public void disableRecycle(boolean disableRecycle) {
+        this.disableRecycle = disableRecycle;
+    }
 
     @Override
     public VH onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        return getItemByViewType(viewType).onCreateViewHolder(parent);
+        VH viewHolder = getItemByViewType(viewType).onCreateViewHolder(parent);
+        if (disableRecycle) viewHolder.setIsRecyclable(false);
+        return viewHolder;
     }
 
     @Override
@@ -66,6 +77,13 @@ class BaseRecyclerBinderAdapter<V extends ViewType, VH extends RecyclerView.View
         synchronized (mLock) {
             object.onRemoved();
             mObjects.remove(object);
+        }
+    }
+
+    void replace(final int index, final Binder<V, VH> object) {
+        synchronized (mLock) {
+            mObjects.remove(index);
+            mObjects.add(index, object);
         }
     }
 

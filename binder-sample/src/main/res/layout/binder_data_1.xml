@@ -10,7 +10,8 @@
         app:cardBackgroundColor="#ffffff"
         app:cardCornerRadius="4dp">
 
-    <ImageView android:layout_width="match_parent"
+    <ImageView android:id="@+id/image"
+               android:layout_width="match_parent"
                android:layout_height="240dp"
                android:src="@drawable/binder1_bg"
                android:scaleType="centerCrop"

@@ -42,6 +42,18 @@ public class SectionBinderHolder<S extends Section, V extends ViewType, VH> {
         mSectionItemsList.get(section.position()).remove(item);
     }
 
+    public <B extends Binder<V, VH>> void replace(final S section, final B item,
+                                                 final int index) {
+        initSections(section);
+            int pos = 0;
+            for (int i=0; i < mSectionItemsList.size() ; i++) {
+                if (pos >= index) break;
+                pos += mSectionItemsList.get(i).size();
+            }
+        mSectionItemsList.get(section.position()).remove(pos - index);
+        mSectionItemsList.get(section.position()).add(pos-index,item);
+    }
+
     public void clear(final S section) {
         initSections(section);
         mSectionItemsList.get(section.position()).clear();

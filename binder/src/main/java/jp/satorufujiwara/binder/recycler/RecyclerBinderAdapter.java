@@ -43,7 +43,7 @@ public class RecyclerBinderAdapter<S extends Section, V extends ViewType>
             mSectionBinderHolder.insert(section, item, index);
             insert(item, mSectionBinderHolder.getSectionIndex(section) + index);
             if (notifyOnChange) {
-                notifyDataSetChanged();
+                notifyItemInserted(index);
             }
         }
     }
@@ -98,6 +98,17 @@ public class RecyclerBinderAdapter<S extends Section, V extends ViewType>
             mSectionBinderHolder.clear(section);
             if (notifyOnChange) {
                 notifyDataSetChanged();
+            }
+        }
+    }
+
+    public <B extends Binder<V, RecyclerView.ViewHolder>> void replace(final S section, final B item,
+                                                                      final int index) {
+        synchronized (mLock) {
+            mSectionBinderHolder.replace(section, item, index);
+            replace(index, item);
+            if (notifyOnChange) {
+                notifyItemChanged(index);
             }
         }
     }
